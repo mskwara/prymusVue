@@ -15,17 +15,17 @@
     </form>
   </div>
   <div class="right">
-    <h1 v-if="participants.length > 0">Lista ludków</h1>
-    <ul class="list-group list-group-flush" v-if="participants.length > 0">
-      <li class="list-group-item" :key="participant" v-for="participant in participants">{{ participant }}</li>
-    </ul>
-
+    <participants-list :list="participants" title="Lista osób"></participants-list>
+    <participants-list :list="participants" title="Druga lista"></participants-list>
   </div>
 </div>
 </template>
 
 <script>
+  import ParticipantsList from "./ParticipantsList.vue";
+
   export default {
+    components: {ParticipantsList},
     data() {
       return {
         name: "",
