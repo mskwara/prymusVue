@@ -1,51 +1,39 @@
 <template>
 <div>
   <div class="left">
-    <form @submit.prevent="addParticipant()" @reset.prevent="clear()">
-      <div class="form-group">
-        <label class="form-label">Imię</label><br>
-        <input class="form-control" placeholder="Imię" type="text" v-model="name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nazwisko</label><br>
-        <input class="form-control" placeholder="Nazwisko" type="text" v-model="surname">
-      </div>
-        <button class="btn btn-primary" :disabled="disableOrNot()" type="submit">Add!</button>
-        <button class="btn btn-primary" type="reset">Clear list!</button>
-    </form>
+    <add-new-participant @added="addNewParticipant($event)" @clear="clear()"></add-new-participant>
   </div>
   <div class="right">
-    <participants-list :list="participants" title="Lista osób"></participants-list>
-    <participants-list :list="participants" title="Druga lista"></participants-list>
+    <participants-list :list="participants" title="Lista osób" @removed="removePerson($event)"></participants-list>
   </div>
 </div>
 </template>
 
 <script>
   import ParticipantsList from "./ParticipantsList.vue";
+  import AddNewParticipant from "./AddNewParticipant.vue";
 
   export default {
-    components: {ParticipantsList},
+    components: {ParticipantsList, AddNewParticipant},
     data() {
       return {
-        name: "",
-        surname: "",
         participants: []
       }
     },
     methods: {
-      addParticipant() {
-        this.participants.push(this.name +" "+ this.surname);
-        this.name = "";
-        this.surname = "";
+      addNewParticipant(participant) {
+        this.participants.push(participant);
+      },
+      removePerson(id){
+        for(var i = 0 ; i < this.participants.length ; i++){
+          if(this.participants[i].id == id){
+            this.participants.splice(i, 1);
+          }
+        }
+
       },
       clear() {
         this.participants = [];
-        this.name = "";
-        this.surname = "";
-      },
-      disableOrNot(){
-        return this.name == "" || this.surname == "" ? true : false;
       }
     }
 
